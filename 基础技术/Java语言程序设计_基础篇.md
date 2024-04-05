@@ -91,15 +91,15 @@
     }
     ```
 - do-while循环
-```java
-do {
-    // 循环体
-} while (循环继续条件);
-```
+    ```java
+    do {
+        // 循环体
+    } while (循环继续条件);
+    ```
 - for循环
-```java
-for (i = initialValue; i < endValue; i ++) {
-    // loop body
-}
-```
+    ```java
+    for (i = initialValue; i < endValue; i ++) {
+        // loop body
+    }
+    ```
 
