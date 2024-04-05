@@ -139,3 +139,84 @@
     - 优势调用一个方法时，会有多个匹配，这时编译器无法进行判断，因此会产生歧义调用
     - 局部变量的作用域从声明的地方开始，到包含该变量的块结束
 - 当编写一个大程序时，可以使用分治策略，通过结构图，将大问题分解成小问题。然后自顶向下或自底向上的进行实现。
+
+#### 第6章 一维数组
+
+- 在程序中使用数组，必须声明一个引用数组的变量，并指明数组的元素类型
+    - elementType可以是任意数据类型，但所有元素必须具有相同的数据类型
+    ```java
+    // 元素类型[] 数组引用变量;
+    elementType[] arrayRefVar;
+    ```
+- 声明一个数组变量时并不在内存中给数组分配任何空间，如果没有赋值对数组的引用则该值为null
+- 可以用new操作符创建数组，可以在声明数组的同时用new创建数组，并将数组引用赋值给引用数组的变量
+    ```java
+    // 元素类型[] 数组引用变量 = new 元素类型[数组大小];
+    elementType[] arrayRefVar = new elementType[arraySize]
+    ```
+- 创建数组之后就不能再修改它的大小，并且会被赋予默认值0。
+- 数组下标是基于0的，数组中的每个元素都可以使用下面的【下标变量】语法表示
+    ```java
+    // 数组引用变量[下标];
+    arrayRefVar[index];
+    ```
+- 数组初始化语法如下：
+    ```java
+    // 元素类型[] 数组引用变量 = {值0，值1，...，值k};
+    // elementType[] myList = {value0, value1, ..., valuek};
+    double[] myList = {1.9, 2.9, 3.4, 3.5};
+    ```
+- 数组支持for-each循环，不使用下标变量就可以顺序地遍历整个数组。
+    ```java
+    /*
+    for (elementType element: arrayRefVar) {
+        // process the element
+    }
+    */
+    for (double u: myList) {
+        System.out.println(u);
+    }
+    ```
+- 数组的赋值是将数组引用赋值给另一个变量，两个变量会指向相同的数组，因此数组作为实参时传递的是引用
+- 匿名函数：没有显式地引用变量的数组
+    ```java
+    // new 数组类型[]{值0，值1，...，值k};
+    // elementType[]{value0, value1, ..., valuek};
+    printArray(new int[](3, 1, 2, 6, 4, 2))
+    ```
+- 可变长参数列表，类型相同但个数可变的参数传递给方法。该方法只能指定一个可变参数，该参数必须放到最后一个，使用时当作数组使用
+    ```java
+    // 类型名...参数名
+    // typeName...parameterName
+    public static void printMax(double... numbers) {
+        double result = numbers[0];
+    }
+    ```
+    
+
+#### 第7章 多维数组
+- 多维数组的语法
+    ```java
+    // 数组类型[][] 数组名;
+    int[][] matrix;
+    matrix = new int[5][5];
+    
+    // ok
+    int[][] triangleArray = new int[5][]
+    // error
+    int[][] triangleArray = new int[][]
+    ```
+- 二维数组中的每一行本身就是一个数组，因此，各行的长度就可以不同
+    ```java
+    int[][] triangleArray = {
+        {1, 2, 3, 4, 5},
+        {1, 2, 3, 4},
+        {1, 2, 3},
+        {1, 2},
+        {1},
+    };
+    ```
+- 更高维度的数组同样处理
+    ```java
+    double[][][] scores = new double[10][24][2];
+    ```    
