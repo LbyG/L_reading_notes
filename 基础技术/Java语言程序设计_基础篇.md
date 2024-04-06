@@ -326,3 +326,166 @@
     // methodName(parameterName: parameterType)
     getArea(): double
     ```
+
+#### 第9章 字符串与文本I/O
+
+- 在Java中，字符串是一个对象，可以使用如下方法构造一个字符串
+    ```java
+    // 从字符串直接量创建一个字符串
+    // String newString = new String(stringLiteral);
+    String message = new String("Welcome to Java");
+    // Java将字符串直接量看作String对象
+    String message = "Welcome to Java";
+    // 用字符数组创建一个字符串
+    char[] charArray = {'G', 'o', 'o', 'd'};
+    String message = new String(charArray);
+    ```
+- String对象是不可变的，它的内容不能改变的。Java虚拟机对具有相同字符串序列的字符串直接量使用同一个实例
+    ```java
+    // s1 == s2   result is false
+    // s1 == s3   result is true
+    String s1 = "Welcome to Java";  // 指向内置字符串对象"Welcome to Java"
+    String s2 = new String("Welcome to Java");  // 指向新创建的字符串对象
+    String s3 = "Welcome to Java";  // 指向内置字符串对象"Welcome to Java"
+    ```
+- 字符串比较：运算符`==`只能检测两个字符串是否指向同一个对象，不能判断两个字符串变量的内容是否相同，应该使用`equals`方法判断两个字符串是否相同
+    ```java
+    // 如果这个字符串等于字符串s1则返回true
+    +equals(s1: String): boolean
+    // 判断这个字符串的前缀是否是prefix
+    +startsWith(prefix: String): boolean
+    // 判断这个字符串的后缀是否是suffix
+    +endsWith(suffix: String): boolean
+    ```
+- 字符串的基础方法
+    ```java
+    String s = new String("test");
+    // 返回字符串长度
+    // +length(): int
+    int length = s.length();    // 4
+    // 返回指定下标处的字符串
+    // +charAt(index: int): char
+    char c = s.charAt(0);   // 't'
+    // 将这个字符串与s1字符串拼接构造新的字符串，并将其引用返回
+    // +concat(s1: String): String
+    String newStr = s.concat(" concat");    // "test concat"
+    ```
+- 获取子串的方法：返回会构造一个新的字符串
+    ```java
+    String s = new String("test");
+    // 返回从下标beginIndex开始的子串
+    // +substring(beginIndex: int): String
+    String subStr1 = s.substring(1);    // "est"
+    // 返回从下标beginIndex到beginIndex-1的子串
+    // +substring(beginIndex: int, endIndex: int): String
+    String subStr2 = s.substring(1, 3); // "es"
+    ```
+- 字符串的转换，替换和分隔：返回会构造一个新的字符串
+    ```java
+    String s = new String(" Hello World\n");
+    // 字符串转全小写
+    String lowerStr = s.toLowerCase();  // " hello world\n"
+    // 字符串转全大写
+    String upperStr = s.toUpperCase();  // " HELLO WORLD\n"
+    // 去掉两遍的空白字符
+    String trimStr = s.trim();          // "Hello World"
+    // 字符替换
+    String replaceChrStr = s.replace('l', 'k');     // " Hekko Workd\n"
+    // 替换首个匹配成功的字符串
+    String replaceFirstStr = s.replaceFirst("l", "jk"); // " Hejklo World\n"
+    // 替换全部匹配成功的字符串
+    String replaceAllStr = s.replaceAll("l", "jk"); // " Hejkjko Worjkd\n"
+    // 通过分隔符，将字符串分割成字符串数组
+    String[] splitStrList = s.split("o");   // {" Hell", " W", "rld\n"}
+    ```
+- 查找字符串中某个字符或某个字符串的位置
+    ```java
+    String s = new String("test test!");
+    // 查找第一个匹配成功的下标，如果没有匹配到，则返回-1
+    // +indexOf(ch: char): int
+    // +indexOf(ch: char, fromIndex: int): int
+    // +indexOf(s: String): int
+    // +indexOf(s: String, fromIndex: int): int
+    int firstIndex = s.indexOf("es");   // 1
+    // 查找最后一个匹配成功的下标，如果没有匹配到，则返回-1
+    // +lastIndexOf(ch: char): int
+    // +lastIndexOf(ch: char, fromIndex: int): int
+    // +lastIndexOf(s: String): int
+    // +lastIndexOf(s: String, fromIndex: int): int
+    int lastIndex = s.lastIndexOf("es");   // 6
+    ```
+- 可以通过`toCharAarry`方法，将字符串转化为字符数组
+    ```java
+    char[] chars = "test".toCharArray();    // {'t', 'e', 's', 't'}
+    ```
+- 可以通过`valueOf`方法，将基础类型`char, char[], double, float, int, long, boolean`转化为字符串
+    ```
+    double doubleValue = 5.44;
+    String s = String.valueOf(doubleValue);     // "5.44"
+    ```
+- `StringBuilder/StringBuffer`:支持添加，插入或追加的字符串处理方案
+    ```java
+    StringBuilder stringBuilder = new StringBuilder("Hello");
+    // 追加一个char数组或字符串到StringBuilder生成器
+    // +append(data: char[]): StringBuilder
+    // +append(s: String): StringBuilder
+    stringBuilder.append("World");      // "HelloWorld"
+    // 从字符串生成器StringBuilder返回一个字符串对象
+    // +toString(): String
+    String s = StringBuilder.toString();    // "HelloWorld"
+    ```
+- `File`类提供了一种抽象，用以不依赖机器的方式来处理文件
+    - 用相对路径，不要用绝对路径，绝对路径会有window/linux系统命名问题
+    ```java
+    // 为特定路径名创建一个File对象，路径可以是目录，也可以是一个文件
+    // +File(pathname: String)
+    File file = File("image/test.txt");
+    // 判断是否存在
+    // +exists(): boolean
+    boolean isExist = file.exist();
+    // 判断是否为文件
+    // +isDirectory(): boolean
+    boolean isDir = file.isDirectory(); // false
+    // 判断是否为目录（文件夹）
+    // +isFile(): boolean
+    boolean isFile = file.isFile();     // true
+    ```
+- `PrintWriter`写数据到文件
+    ```java
+    // 从File类构造
+    // +PrintWriter(file: File)
+    File file = File("image/test.txt");
+    PrintWriter writer1 = new PrintWriter(file);
+    // 从文件路径构造
+    // +PrintWriter(filename: String)
+    PrintWriter writer2 = new PrintWriter("image/test.txt");
+    // 写基础类型数据，char数组，字符串到文件
+    // +print(data: dataType): void
+    writer2.print("test\n");
+    writer2.print(1);
+    writer2.print(3.14);
+    ```
+- `Scanner`从文件读取数据
+    ```java
+    // 从File类构造
+    // +Scanner(source: File)
+    Scanner systemInInput = new Scanner(System.in);
+    Scanner fileInput = new Scanner(new File("image/test.txt"));
+    // 判断是否还有可读的数据
+    // +hasNext(): boolean
+    boolean hasNext = fileInput.hasNext();
+    // 读取下一个数据
+    // +next(): String  读取到下一个分隔符，默认分隔符为空格
+    // +nextLine(): String  读取到下一个换行符，不同系统的换行符不一样
+    // +nextInt(): int  读取下一个标志作为int值
+    // ...
+    String line = fileInput.nextLine();
+    int intValue = fileInput.nextInt();
+    // 设置支持正则表达式的分隔符，与next()搭配使用
+    // +useDelimiter(pattern: String)
+    Scanner s = new fileInput.useDelimiter("\\s*fish\\s*");
+    // 关闭扫描器
+    // +close()
+    systemInInput.close();
+    fileInput.close();
+    ```    
