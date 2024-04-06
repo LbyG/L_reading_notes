@@ -626,4 +626,78 @@
             // ...
         }
     }
-    ```    
+    ```
+
+#### 第13章 异常处理
+
+- Java支持抛出异常和捕获异常
+    ```java
+    void funcToThrowException() throws Exception {
+        // 抛出异常
+        throw new Exception("test exception")
+    }
+    
+    void funcToCatchException() {
+        try {
+            // 语句组
+            funcToThrowException();
+            // 语句组
+        }
+        catch (ArithmeticException ex) {
+            // 处理异常ArithmeticException
+        }
+        catch (Exception ex) {
+            // 处理异常Exception
+        }
+        finally {
+            // 会处理的代码块，即使try开始到finally之前，触发了return，finally块还是会执行
+            // 一般用于处理资源的释放
+        }
+    }
+    ```
+- `RuntimeException`, `Error`以及他们的子类称为**免检异常**，其他为**必检异常**。
+    - 大多数情况下，免检异常都会反映出程序设计上不可恢复的逻辑错误。Java语言不允许编写代码捕获和声明免检异常
+    - `RuntimeException`：由Java虚拟机抛出的系统错误
+    - `Error`：程序设计错误导致的运行时异常，比如数组越界，类型转换错误
+- 每个方法都必须声明它可能抛出的必检异常的类型
+    ```java
+    // 声明单个异常
+    public void myMethod() throws IOException {
+        // ...
+    }
+    // 声明多个异常
+    public void myMethod() throws Exception1, Exception2, ..., ExceptionN {
+        // ...
+    }
+    ```
+- Java强迫程序员处理必检异常，由如下两种处理方法
+    ```java
+    // public void p2() throws IOException
+    
+    // 在try-catch块中调用它
+    void p1() {
+        try {
+            p2();
+        }
+        catch (IOException ex) {
+            ...
+        }
+    }
+    
+    // 在调用方法中声明要抛出异常
+    void p1 throws IOException {
+        p2();
+    }
+    ```
+- 处理异常的逻辑
+    - 仅当必须处理不可预料的错误状况时应该使用它。例如：文件无法进行I/O
+    - 不要用`try-catch`处理简单的，可预料的情况。例如：null的处理。
+- 重新抛出**链式异常**
+    ```java
+    try {
+        ...
+    }
+    catch (Exception ex) {
+        throw new Exception("new info ...", ex);
+    }
+    ```
