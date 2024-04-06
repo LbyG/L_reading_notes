@@ -276,14 +276,15 @@
     - 类
         | 修饰符 | 访问限制 |
         |---|---|
-        | 没有使用可见性修饰符，默认为包内私有 | 可以被同一个包中的任何类访问 |
+        | (default) | 可以被同一个包中的任何类访问 |
         | public | 可以被包外访问，可以被任何其他的类访问 |
     - 方法和数据域
         | 修饰符 | 访问限制 |
         |---|---|
-        | 没有使用可见性修饰符，默认为包内私有 | 可以被同一个包中的任何类访问 |
-        | public | 可以被包外访问，可以被任何其他的类访问 |
         | private | 只能在它自己的类中被访问 |
+        | (default) | 可以被同一个包中的任何类访问 |
+        | protected | 1.允许同一个包内访问; 2.允许子类访问定义在父类的数据域和方法 |
+        | public | 可以被包外访问，可以被任何其他的类访问 |
 - 数据域封装：为了避免对数据域的直接修改，应该使用private修饰符将数据域声明为私有。
     - 通过get方法返回数据域的值
         ```java
@@ -533,3 +534,96 @@
 - 静态变量和方法的使用注意事项
     - 用类名（而不是引用变量）引用静态变量和方法，以增强可读性并避免错误
     - 不要从构造方法初始化静态数据，要使用set改变
+
+#### 第11章 继承与多态
+
+- Java支持继承，可以从已有的类`C1`派生出新类`C2`，`C1`为父类，`C2`为子类。
+- 子类使用下面的语法拓展父类，继承的注意事项：
+    - 子类无法访问父类的私有数据域
+    - 不是所有`is-a`都该用继承来建模
+    - 继承是用来为`is-a`建模的，而不是为了重用
+    - Java只支持单一继承，不允许多重继承，一个Java类只能继承自一个父类
+    ```java
+    public class ChildClass extends ParentClass {
+        ...
+    }
+    ```
+- 父类的构造方法必须使用关键字`super`，而且这个调用必须是构造方法的第一条语句，父类的构造方法不被子类继承。
+    - 如果子类没有显式调用父类构造函数，编译器会自动将`super()`作为构造方法的第一条语句
+    - 构造方法链：构造一个类的实例时，会沿着继承链调用所有父类的构造方法
+    ```java
+    class ChildClass extend ParentClass {
+        public ChildClass() {
+            super() or super(parameters);
+            // ... ChildClass数据域初始化
+        }
+    }
+    ```
+- 关键词`super`还可以引用父类的方法
+    - Java不支持`super.super.func()`调用父类的父类
+    ```java
+    class ChildClass extend ParentClass {
+        public void func() {
+            super.func();
+            // ...
+        }
+    }
+    ```
+- **多态**：是指父类型的变量可以引用子类型的对象
+    ```java
+    ChildClass childClass = new ParentClass();
+    ```
+- **动态绑定**：是指Java中调用哪个函数是由变量的实际类型决定的
+    - 声明类型：一个变量必须被声明为某种类型，变量的这个类型称为声明类型。如下面代码中的`Object`
+    - 实际类型：变量的实际类型是被变量引用的对象的实际类。如下面代码中的`String`
+    ```java
+    Object o = new String();
+    ```
+- Java支持在继承体系结构中，将一个类转化为另一个类
+    ```java
+    // 子类转换父类支持隐式转换
+    ParentClass parent = new ChildClass();
+    // 父类转子类需要显式转换，为确保转换成功，可以利用运算符instanceof
+    if (parent instanceof ChildClass) {
+        ChildClass child = (ChildClass)parent;
+    }
+    ```
+- `==`运算符检测两个引用变量是否指向同一个对象。如果要检测内容是否相同，需要子类覆盖`Object`类的`equals`方法
+    ```java
+    public boolean equals(Object o) {
+        ...
+    }
+    object1.equals(object2);
+    ```
+- ArrayList类支持存储不限定个数的对象
+    ```java
+    // 初始化
+    ArrayList list = new ArrayList();
+    // 添加一个元素
+    list.add("test1");              // {"test1"}
+    list.add("test2");              // {"test1", "test2"}
+    // 返回大小
+    list.size();                    // 2
+    // 更新元素
+    list.set(1, "update test2");    // {"test1", "update test2"}
+    // 引用元素
+    list.get(1);                    // "update test2"
+    // 删除一个元素
+    list.remove(0);                 // {"update test2"}
+    // 删除所有元素
+    list.clear();                   // {}
+    ```
+- `final`修饰符表明一个类是终极的，是不能作为父类的。或者修饰一个函数是不能被覆盖的
+    ```java
+    // 无法作为父类
+    public final class ClassName {
+        // ...
+    }
+    
+    public class Test {
+        // 无法被覆盖
+        public final void func() {
+            // ...
+        }
+    }
+    ```    
