@@ -1,5 +1,25 @@
 ## Java语言程序设计（基础篇）
 
+#### UML类图
+- 在UML类图中，静态变量和方法都是以下划线标注的
+- 抽象类和抽象方法的名字用斜体。比如：*Object*，*+getArea(): double*
+- 符号`-`表示`private`装饰符。比如：`-getArea(): double`
+- 符号`#`表示`protected`修饰符。比如：`#getArea(): double`
+```java
+// 数据域表示为：
+// 数据域名：数据域类型
+// dataFieldName: dataFieldType
+radius: double
+// 构造方法可以表示为：
+// 类名（参数名：参数类型）
+// ClassName(parameterName: parameterType)
+Circle()
+Circle(newRadius: double)
+// 方法可以表示为
+// methodName(parameterName: parameterType)
+getArea(): double
+```
+
 #### 第1章 计算机，程序和Java概述
 
 - 编译器会生成一个拓展名为.class的字节码文件，字节码类似于机器指令，但它是体系结构中立的，是可以在任何带Java虚拟机（JVM）的平台上运行。虚拟机是一个解释Java字节码的程序，因此Java字节码可以在不同的硬件平台和操作系统上运行。
@@ -309,23 +329,6 @@
     for (int i = 0; i < circleArray.length; i ++) {
         circleArray[i] = new Circle();
     }
-    ```
-- UML类图的一些支持
-    - 在UML类图中，静态变量和方法都是以下划线标注的
-    - `-`号表示私有装饰符
-    ```java
-    // 数据域表示为：
-    // 数据域名：数据域类型
-    // dataFieldName: dataFieldType
-    radius: double
-    // 构造方法可以表示为：
-    // 类名（参数名：参数类型）
-    // ClassName(parameterName: parameterType)
-    Circle()
-    Circle(newRadius: double)
-    // 方法可以表示为
-    // methodName(parameterName: parameterType)
-    getArea(): double
     ```
 
 #### 第9章 字符串与文本I/O
@@ -701,3 +704,75 @@
         throw new Exception("new info ...", ex);
     }
     ```
+
+#### 第14章 抽象类和接口
+
+- 通过`abstract`装饰符表示**抽象类**和**抽象方法**
+    ```java
+    // 抽象类
+    public abstract class ClassName {
+        // 抽象方法
+        public abstract void funcName();
+    }
+    ```
+- 抽象类的注意事项    
+    - 抽象方法只能定义在抽象类中
+    - 抽象类不能用new初始化实例
+    - 具体类的数据域不能存在抽象类
+    - 可以父类是具体类，子类是抽象类
+    - 抽象类可以作为数据类型创建引用变量
+        ```java
+        // AbstractClass为抽象类
+        AbstractClass[] object = new AbstractClass[10];
+        ```
+- 接口只包含静态常量和抽象方法，需要使用`implements`关键字让对象类实现这个接口中的抽象方法。
+    - 接口中允许变量的修饰符`public final static`和方法忽略修饰符`public abstract`，变量会默认为静态常量，方法会默认为抽象方法。
+    ```java
+    // 修饰符 interface 接口名 {
+    // /** 常量声明 */
+    // /** 方法签名 */
+    // }
+    public interface Edible {
+        final int static constantVal = 10;
+        public abstract String howToEat();
+    }
+    
+    // 对象类实现接口
+    class Chiken implements Edible {
+        public String howToEat() {
+            // ...
+        }
+    }
+    abstract class Fruit implements Edible {
+        // ...
+    }
+    ```
+- 接口与抽象类的对比
+    |  | 抽象类 | 接口 |
+    |---|---|---|
+    | 变量 | 无限制 | 所有的变量必须是静态常量`public static final` |
+    | 构造方法 | 子类通过构造方法链调用构造方法，抽象类不能用new操作符实例化 | 没有构造方法，接口不能用new操作符实例化 |
+    | 方法 | 无限制 | 所有方法必须是公共的抽象实例方法`public abstract` |
+    | 对象类实现方法 | 单一继承 | 多重拓展 |
+    | 什么情况下使用 | `is-a`关系，B是一种A，此时A定义为抽象类 | `has`关系，B具有属性A，此时A定义为接口 |
+- Java接口支持多重继承，接口可以通过`extends`继承其它接口
+    ```java
+    // 对象类多重拓展接口
+    public class NewClass extends BaseClass implements Interface1, ..., InterfaceN {
+        // ...
+    }
+    
+    // 接口继承其他接口
+    public interface NewInterface extends Interface1, ..., InterfaceN {
+        // ...
+    }
+    ```
+- 接口与抽象类，更推荐使用接口，接口更灵活    
+- 包装类：Java提供了一个方便的方法，将基本类型并入对象或包装成对象，例如`int`包装成`Integer`。
+    - 包装类不可改变
+    - 都有常量`MAX_VALUE`和`MIN_VALUE`
+    - 基本类型和包装类之间可以进行自动转换
+        ```java
+        Integer[] intArray = {1, 2, 3};
+        int sum = intArray[0] + intArray[1] + intArray[2];
+        ```
