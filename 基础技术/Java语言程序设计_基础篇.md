@@ -219,4 +219,110 @@
 - 更高维度的数组同样处理
     ```java
     double[][][] scores = new double[10][24][2];
-    ```    
+    ```
+
+#### 第8章 对象和类
+
+- 实例化：从一个【类】中创建【实例】的过程
+- Java类使用变量定义数据域，使用方法定义动作。类可以通过调用构造方法创建一个新对象
+- 可以把两个类放在同一个文件中，但是文件中只能有一个类时公共的。此外，公共类必须与文件同名。
+- 构造方法有如下特殊性，并且可以重载。如果没有定义构造函数，会生成一个默认构造方法
+    - 构造方法必须具备和所在类相同的名字
+    - 构造方法没有返回类型，甚至连void也没有
+        ```java
+        class Circle {
+            public void Circle() {
+                ...
+            }
+            
+            public void Circle(double radius) {
+                ...
+            }
+        }
+        ```
+    - 构造方法是在创建一个对象使用new操作符时调用的。构造方法的作用是初始化对象。
+- 对象是通过对象引用变量来访问的。
+    ```java
+    // 类名 对象引用变量;
+    // ClassName objectRefVar;
+    Circle myCircle;
+    myCircle = new Circle()
+    // 类名 对象引用变量 = new 类名();
+    // ClassName objectRefVar = new ClassName();
+    Circle myCircle = new Circle();
+    ```
+- 创建一个对象之后，他的数据和方法可以使用圆点运算符（.）来访问和调用，该运算符也称为对象成员访问运算符
+    ```java
+    // 引用对象的数据域
+    objectRefVar.dataField
+    // 调用对象的方法
+    objectRefVar.method(参数)
+    ```
+- Java支持静态方法和静态变量，他们在一个类的所有实例中共享数据。可以通过加上修饰符`static`声明一个静态变量或定义一个静态方法。
+    ```java
+    class className {
+        // 静态变量
+        static int numberOfObjects;
+        // 类中的常量是被该类的所有对象所共享的
+        final static double PI = 3.1415926;
+        
+        // 静态方法
+        static init getNumerObjects() {
+            return numberOfObjects;
+        }
+    }
+    ```
+- 可见性修饰符
+    - 类
+        | 修饰符 | 访问限制 |
+        |---|---|
+        | 没有使用可见性修饰符，默认为包内私有 | 可以被同一个包中的任何类访问 |
+        | public | 可以被包外访问，可以被任何其他的类访问 |
+    - 方法和数据域
+        | 修饰符 | 访问限制 |
+        |---|---|
+        | 没有使用可见性修饰符，默认为包内私有 | 可以被同一个包中的任何类访问 |
+        | public | 可以被包外访问，可以被任何其他的类访问 |
+        | private | 只能在它自己的类中被访问 |
+- 数据域封装：为了避免对数据域的直接修改，应该使用private修饰符将数据域声明为私有。
+    - 通过get方法返回数据域的值
+        ```java
+        // get方法有如下签名：
+        // public returnType getPropertyName()
+        public double getRadius() { ... }
+        // 如果返回类型是boolean型，习惯上如下定义get方法
+        // public boolean isPropertyName()
+        public boolean isFilled() { ... }
+        ```
+    - 通过set方法给数据域设置新值
+        ```java
+        // set方法有如下签名
+        // public void setPropertyName(dataType propertyValue)
+        public void setRadius(double radius) { ... }
+        ```
+- 对象的数组实际上是引用变量的数组，当使用new操作符创建对象数组后，这个数组中的每个元素都是默认值为null的引用变量
+    ```java
+    // 此时circleArray中的值为null
+    Circle[] circleArray = new Circle[10];
+    // 创建对象并将引用赋值给对象数组下标
+    for (int i = 0; i < circleArray.length; i ++) {
+        circleArray[i] = new Circle();
+    }
+    ```
+- UML类图的一些支持
+    - 在UML类图中，静态变量和方法都是以下划线标注的
+    - `-`号表示私有装饰符
+    ```java
+    // 数据域表示为：
+    // 数据域名：数据域类型
+    // dataFieldName: dataFieldType
+    radius: double
+    // 构造方法可以表示为：
+    // 类名（参数名：参数类型）
+    // ClassName(parameterName: parameterType)
+    Circle()
+    Circle(newRadius: double)
+    // 方法可以表示为
+    // methodName(parameterName: parameterType)
+    getArea(): double
+    ```
